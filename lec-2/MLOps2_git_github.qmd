@@ -1,0 +1,719 @@
+# MLOps — Class 2: Git & GitHub
+
+**Agenda:** ① Git ② GitHub ③ Terminology (Push, Pull, Commit) ④ Branching ⑤ Conflict Resolution ⑥ Contributing to Open-Source Projects
+
+════════════════════════════════════════════════════════════
+
+# 📌 TOPIC 1 — Why Learn Git in an MLOps Module?
+
+**Question from a learner:** *Git seems simple. Shouldn't it be taught at the start of the course?*
+
+**Answer:**
+- Git was covered **briefly after Python**, but not in depth for everyone.
+- **Most people (including the tutor) never took a proper Git course.** They learn only what they use at work and "work their way around it".
+- In MLOps, Git is used every day for:
+  - **Contributing** code
+  - **Fixing bugs**
+  - **Understanding** someone else's code
+  - **Documenting** the project (README)
+  - **CI/CD** (automatic testing & deployment; covered later)
+- So it is part of the MLOps curriculum.
+
+> 💡 **Real-world fact:** In most serious companies, code **never sits on your laptop**. Many companies don't even allow cloning code to your local machine; you work **only on a cloud machine**.
+
+> ✅ **END OF TOPIC 1 — Why Learn Git in an MLOps Module?**
+
+════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+
+# 📌 TOPIC 2 — Git vs GitHub
+
+**Are Git and GitHub the same thing?** ❌ **No.**
+
+| | Git | GitHub |
+|---|---|---|
+| **What** | An **open-source Version Control System (VCS)** | A **product/service** that hosts Git repositories online |
+| **Who owns it** | Open source (free for everyone) | **Microsoft** |
+| **Analogy** | **Email** (the technology) | **Gmail** (a company providing email as a service) |
+
+### Email Analogy
+
+```
+Technology       Companies that provide it as a service
+─────────────    ──────────────────────────────────────────
+Email      ───►  Gmail, Yahoo, Zepto Mail, Proton
+Git        ───►  GitHub, GitLab, Bitbucket, CodeCommit
+```
+
+### Companies Providing "Git as a Service"
+
+| Service | Owned by |
+|---|---|
+| **GitHub** | Microsoft |
+| **GitLab** | GitLab Inc. |
+| **Bitbucket** | Atlassian |
+| **CodeCommit** | Amazon (AWS); used inside AWS infrastructure |
+
+> ✅ **END OF TOPIC 2 — Git vs GitHub**
+
+════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+
+# 📌 TOPIC 3 — What Version Control Does: Commit = Snapshot
+
+**Situation:** Your project is **stable** and working fine. Now you want to add a new feature **without breaking the stable version**.
+
+```
+Current file  ●━━━━━━━━[ Stable ]━━━━━━━━━━━━━━━━►
+                           │
+                           ▼
+                Commit = snapshot of the codebase
+```
+
+- **Without Git:** you would make a copy (Ctrl+C, Ctrl+V) of the folder as a backup. Messy!
+- **With Git:** you **commit**, which **saves a snapshot** of the whole codebase.
+- You can **go back (revert)** to any snapshot at any time.
+- So you can modify code freely, **without fear of losing your work**.
+
+> ✅ **END OF TOPIC 3 — What Version Control Does: Commit = Snapshot**
+
+════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+
+# 📌 TOPIC 4 — Types of Version Control Systems
+
+![Centralized vs Distributed VCS](images/vcs_centralized_vs_distributed.png)
+
+### 4.1 Centralized Version Control System (CVCS)
+
+**How it works:**
+- There is **one central server** with the **only copy** of the code.
+- Developers (e.g., Tulasi, Rajesh, Koushal, Shubham) **log in, work, and log out**.
+- **No developer gets a copy** on their computer.
+- **Only ONE person can make changes at a time** (no concurrency).
+
+| ✅ Pros | ❌ Cons |
+|---|---|
+| **Maximum / high security**: all code stays on one server | **Single point of failure**: server goes down → everything is lost (no backup) |
+| You know **exactly who logged in, when, and what they changed** | **Not scalable**: impossible with thousands of developers |
+| **No conflicts**: only one person edits at a time | **No offline work**: must always be connected |
+| **Real-time** updates and monitoring | |
+
+**When to use:** very high-security projects (e.g., **military-grade** applications). Rare, but it exists.
+
+> 🎮 **Could GTA 6 be built this way?** No. Thousands of developers across the world work on it day and night. A centralized system can't scale to that.
+
+### 4.2 Distributed Version Control System (DVCS), like Git
+
+**How it works:**
+
+```
+Remote Server ──(copy/clone)──► Developer's copy ──(make changes)──► Modified copy
+      ▲                                                                    │
+      └──────────────────────────(update server / push)────────────────────┘
+```
+
+1. A **remote server** holds the main code.
+2. Each developer **creates a full copy** on their computer.
+3. They work on the copy (add features, fix bugs) → **modified copy**.
+4. They **update the server** with their changes.
+
+| ✅ Pros | ❌ Cons |
+|---|---|
+| **Very scalable**: thousands of developers at once | **Security risk**: everyone has a full copy, so code can **leak** |
+| Full copy of the code on your own computer | |
+| Can work **offline** | |
+
+> ⚠️ **Real example of the con:** The **entire source code of GTA 5** (one of the most popular and profitable games ever, with a budget of hundreds of millions of dollars) **was leaked on Christmas Eve 2023**. Leaks like that are extremely harmful to a company.
+
+### 4.3 Quick Comparison
+
+| | Centralized | Distributed (Git) |
+|---|---|---|
+| Copies of code | One (on server) | Everyone has one |
+| People working at once | One | Many |
+| Offline work | ❌ | ✅ |
+| Scalable | ❌ | ✅ |
+| Security | 🔒 Highest | ⚠️ Risk of leaks |
+| Conflicts | Never | Possible (see Topic 10) |
+
+> ✅ **END OF TOPIC 4 — Types of Version Control Systems**
+
+════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+
+# 📌 TOPIC 5 — Git Terminology & Commands
+
+### 5.1 Terminology
+
+| Term | Meaning |
+|---|---|
+| **Repository (repo)** | A **fancy word for a folder** that contains **code, documents** and important info. *(Not your hard disk full of movies!)* |
+| **Local Repository** | The folder **on your computer**. It may or may not be synced with the remote repo. |
+| **Remote Repository** | The **online copy** of your codebase (on GitHub). |
+
+> "Repo" can mean the **local** or the **remote** one. Always be clear which one you mean.
+
+### 5.2 Commands
+
+![How a change travels in Git](images/git_add_commit_push.png)
+
+| Command | What it does |
+|---|---|
+| **`git add`** | Adds file(s) to the **staging area** (picks which changes go into the next commit) |
+| **`git commit`** | **Saves a snapshot** of the codebase in your **local** repo |
+| **`git push`** | **Updates the remote repo** with new commits from your local repo |
+| **`git fetch`** | **Downloads** the latest changes from the remote repo (does **not** change your files yet) |
+| **`git pull`** | **Updates your local repo** with the remote repo (= fetch + merge) |
+| **`git clone`** | Creates a **local copy** of a remote repository on your computer |
+
+### 5.3 The Staging Area
+
+```
+git add File1 File2
+        │
+        ▼
+ ┌──── Staging Area ────┐
+ │   File1              │ ───► Commit ───► Push
+ │   File2              │
+ └──────────────────────┘
+```
+
+**The 3-step flow:**   **ADD → COMMIT → PUSH**
+
+### 5.4 Commit vs Push (common confusion)
+
+| | Commit | Push |
+|---|---|---|
+| Saves where? | **Local** repo (your computer) | **Remote** repo (GitHub) |
+| Analogy | Taking a **screenshot** of the codebase | **Uploading** that screenshot online |
+| Others can see it? | ❌ No | ✅ Yes |
+
+> **Learner question:** *Does commit save to the local repo or the remote repo?*
+> **Answer:** **Commit saves to the LOCAL repo.** Only **push** updates the remote one.
+
+> ✅ **END OF TOPIC 5 — Git Terminology & Commands**
+
+════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+
+# 📌 TOPIC 6 — Your GitHub Profile = Your Developer Portfolio
+
+> 💡 **Tutor's advice:** Anyone can write anything on a resume. **GitHub is where interviewers check whether you are really a developer.**
+
+**A good GitHub profile has:**
+- A **profile README**: who you are, skills, past experience, publications
+- **Pinned repositories** of your best projects
+- Projects with **good READMEs** that include **screenshots of the deployed web UI**
+
+**Do:**
+- ✅ Add **screenshots** of your deployed app (people love visuals)
+- ✅ Keep the profile **up to date**
+
+**Don't:**
+- ❌ Write long walls of text. Nobody will read them.
+
+> ✅ **END OF TOPIC 6 — Your GitHub Profile = Your Developer Portfolio**
+
+════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+
+# 📌 TOPIC 7 — Hands-on: Create a Repo, Clone, Commit, Push (GitHub Desktop)
+
+The tutor created the **class repository** (MLOps, September 2026 batch). **All future class notes and notebooks will be uploaded there.** 📌 **Bookmark the link** shared in class.
+
+### 7.1 Create a Repository on GitHub
+
+1. GitHub → **New**
+2. Give it a **name**
+3. Choose **Public** (anyone can see it) or **Private** (only you)
+4. Template: none (for now)
+5. **Create** → an empty repo now exists on your GitHub account
+
+### 7.2 Clone It with GitHub Desktop
+
+1. Download **GitHub Desktop** (Windows / Mac)
+2. **Settings → Sign in** → authorize in the browser
+3. **Add → Clone Repository** → choose your repo → pick a local folder → **Clone**
+4. Click **Open in VS Code**
+
+**What is cloning?** Creating a **local copy** of the **remote** repository on your computer.
+
+**Why clone?** **All development happens locally first.** When it's done, you push to the remote repository.
+
+### 7.3 First Commit: README.md
+
+**Why README matters:** It is the **window into your project**: the problem, the approach, a quick start, and the contents. Everything a new user needs to know.
+
+1. Create `README.md` in the folder
+2. GitHub Desktop shows **"1 changed file"**
+3. Write a **commit message** (be a bit descriptive, e.g., *"This is the first commit"*)
+4. Click **Commit**
+5. Click **Publish / Push** → the remote repo is updated
+
+### 7.4 Empty Folders Are NOT Tracked
+
+> ⚠️ Git **ignores empty folders**. To keep an empty folder in the repo, put an empty placeholder file in it, e.g. **`.gitkeep`**.
+
+### 7.5 Why We Will Move to the Terminal Later
+
+- We start with the **UI** because it is **easier to understand**.
+- In future classes we use **only terminal commands**.
+- **Why?** On **remote servers there is no UI**, only a terminal. You must be comfortable with Git commands.
+
+> 🧙 *"Using the Git GUI? 10 points from Gryffindor!"*
+
+> ✅ **END OF TOPIC 7 — Hands-on: Create a Repo, Clone, Commit, Push (GitHub Desktop)**
+
+════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+
+# 📌 TOPIC 8 — Branches
+
+![Branching and merging](images/git_branching.png)
+
+### 8.1 What Is a Branch?
+
+**A branch = a copy of the codebase** (copy of the folder). That's it.
+
+**Why?**
+- The **main / master** branch is the **stable, production** version. **Never experiment on it directly.**
+- Create a branch (e.g., `v1`) → build the new feature there → each dot is a **commit**.
+- Feature is good? → **merge** it into main.
+- Feature is bad? → **delete the branch**. Main was never touched.
+
+> **In short:** you don't want to "dirty" the production folder. Experiment in a separate copy, and merge only when you're happy.
+
+### 8.2 Creating & Using a Branch (GitHub Desktop)
+
+1. **Current Branch → New Branch** → name it `v1` → **Create Branch**
+2. VS Code (bottom-left corner) now shows **`v1`**: you are on the v1 branch
+3. Add a file, e.g., `v1_branch_edition.md` → **Commit to v1**
+4. You see **"Publish branch"** instead of "Push". **Why?**
+   → The branch exists **only locally**. It must be **published** to the remote first, then you can push to it.
+5. **Switch back to `master`** → the new file is **not there!** ✅ That's the point of branches.
+
+### 8.3 Pull Request (PR) & Merge
+
+**Pull Request** = you **request the owner of the master branch to *pull* your code from your branch into master.**
+
+> 🤔 Confusing name? You're not "pulling" anything. You're **asking the owner to pull** your changes in. That's why it's called a *pull request*.
+
+**Steps:**
+1. Push your branch → GitHub shows the green **"Compare & pull request"** button
+2. Write a title/description (tutor's joke: *"Hey boss, I need at least a 25% hike"* 😄)
+3. Check the arrow direction: **`v1 → master`**
+4. **Create pull request**
+5. The **owner/approver** reviews → **Merge** (or rejects with feedback)
+6. After merging → **delete the branch** (it's no longer needed)
+
+**Who approves PRs?**
+- **Your own repo:** you (the owner)
+- **In a company:** the **repo owner / admins / senior developers / the client**
+  - *Tutor's example:* working for a client, the **client owns the repo**. They approve → code goes to production. Otherwise, you get feedback.
+
+> 💡 PRs can be created in GitHub Desktop too, but it's **safer to do it in the browser**. You'll always have browser access to GitHub.
+
+### 8.4 Feature Branch
+
+**Every feature gets its own branch**, so:
+- You can develop **in peace** (you're the only one changing it)
+- Others working on main are **not disturbed**
+- At the end → **PR → merge**
+
+> ✅ **END OF TOPIC 8 — Branches**
+
+════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+
+# 📌 TOPIC 9 — Contributing to Open-Source Projects
+
+### 9.1 Why Contribute?
+
+- Example: **PyTorch** on GitHub has **5,000+ open issues** and only about **5,000 contributors** (tiny compared to millions of developers).
+- Solve a good issue → become a **contributor** → *"Contributor at PyTorch"* looks great on your resume.
+
+**How to find a starting point:** filter issues by the label **`good first issue`**. These are easier issues for beginners.
+
+> ⚠️ **Sincere request from the tutor:** Don't make **useless PRs** that only fix a spelling or grammar mistake in a README just to become a "contributor". It looks bad. **Make a meaningful contribution.**
+
+### 9.2 Can AI Contribute to Open Source Entirely?
+
+**Partially, but not fully. Why?**
+- **AI is not free; it is very expensive.**
+- Open-source repos are **giant codebases** → solving a hard issue needs **a lot of compute**.
+- Nobody is paying to run AI on every issue.
+- Running AI locally is also hard: the tutor ran a **~27B-parameter open-source model** on an **RTX 4090 (24 GB VRAM)** and it was **not fast enough** for real work. Even the 4-bit version needs ~17 GB VRAM.
+- You *can* try fixing basic issues with an AI coding agent if you have the budget.
+
+**Who approves PRs in open source?** A list of **approvers (senior maintainers)**. Before they review, **automated tests** run on every push.
+
+### 9.3 Step-by-Step: Fork → Clone → Change → Push → Pull Request
+
+![Open-source contribution flow](images/git_open_source_flow.png)
+
+| Step | Action | Why |
+|---|---|---|
+| **① Fork** | Click **Fork** on the original repo | Creates a **copy of the entire repo on YOUR account**. You **can't push** to someone else's repo because you don't own it. |
+| **② Clone** | Clone **your fork** to your computer | To work locally |
+| **③ Change** | Fix the bug / add the feature in VS Code | The actual contribution |
+| **④ Commit & Push** | Commit and push to **your fork** | Only **your fork** is updated, **not** the original |
+| **⑤ Pull Request** | Open a PR from your fork → original repo | Ask the owner to **pull your changes** into their repo |
+
+The owner can **merge** it (→ you become a contributor) or reject it. **It's their choice.**
+
+**Practice repo:** `octocat/Spoon-Knife`, made by GitHub (**Octocat** is GitHub's mascot) **just for practising** forks and PRs.
+
+**Sync fork:** If your fork falls **behind** the original repo, click **"Sync fork"** on GitHub to update it.
+
+**Update a local clone:** use **Fetch origin** (GitHub Desktop) or `git fetch` / `git pull`.
+
+### 9.4 Learner Question: How Do I Actually Fix an Issue?
+
+> *"Once we choose an issue, how do we go ahead? Have it locally, understand the code, fix it, test locally, and push the code for a PR?"*
+
+**Yes, exactly.** The full workflow:
+1. Pick an issue (start with `good first issue`); read the repo's **CONTRIBUTING.md**
+2. **Fork** → **clone** your fork
+3. Create a **new branch** for the fix
+4. **Understand the code** and reproduce the bug locally
+5. **Fix it** and **run the tests locally**
+6. **Commit → push** to your fork
+7. Open a **Pull Request** and mention the issue number (e.g., *"Fixes #1234"*)
+8. **Automated tests** run → **maintainers review** → merge (or feedback)
+
+### 9.5 🏠 Homework
+
+1. **Fork** the tutor's class repository
+2. In the **`students/`** folder, create a folder with **your name** (e.g., `students/Shivam_Prasad/`) and **add a file** inside it (remember: empty folders aren't tracked)
+3. **Commit & push** to your fork
+4. Create a **Pull Request** to the tutor's repo → once it's approved, **you become a contributor!**
+
+> ✅ **END OF TOPIC 9 — Contributing to Open-Source Projects**
+
+════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+
+# 📌 TOPIC 10 — Merge Conflicts & How to Resolve Them
+
+### 10.1 What Is a Conflict? The Chocolate Cake Example 🍫
+
+![Merge conflict](images/git_merge_conflict.png)
+
+- The **chef** has a chocolate cake recipe (= **main branch**). One step says **white sugar**.
+- **You** take a copy of the recipe and experiment: replace white sugar with **stevia**.
+- Your **sibling** also takes a copy and replaces white sugar with **honey**.
+- Both of you try to put your version back into the chef's recipe.
+- **Same line, two different changes** → Git **can't decide** which one is right → **CONFLICT**.
+
+> **A conflict happens when two branches change the SAME line of the SAME file differently.**
+> If they change *different* lines or files, Git merges automatically with no conflict.
+
+### 10.2 What a Conflict Looks Like
+
+Git marks the conflicting part of the file like this:
+
+```text
+<<<<<<< HEAD          (your version)
+sugar = stevia
+=======
+sugar = honey
+>>>>>>> sibling-branch  (the incoming version)
+```
+
+### 10.3 How to Resolve It
+
+1. **Open the file**. VS Code highlights the conflict with buttons: **Accept Current / Accept Incoming / Accept Both**
+2. **Decide** what the final line should be (keep yours, keep theirs, or combine them)
+3. **Delete the markers** (`<<<<<<<`, `=======`, `>>>>>>>`)
+4. **Save**, then **`git add`** the file → **`git commit`**
+5. Push. The merge is complete ✅
+
+> 💡 **Avoid conflicts:** pull often, keep branches short-lived, and talk to teammates working on the same files.
+
+*(Note: the transcript was cut off in the middle of this example. Sections 10.2–10.3 use the standard Git way to resolve conflicts.)*
+
+> ✅ **END OF TOPIC 10 — Merge Conflicts & How to Resolve Them**
+
+════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+
+# 📌 TOPIC 11 — Bonus: Terminal Cheat Sheet (GitHub Desktop → Terminal)
+
+Future classes use **only the terminal**, so here is what each GitHub Desktop button does as a command:
+
+| GitHub Desktop button | Terminal command |
+|---|---|
+| Add → Clone repository | `git clone <repo-url>` |
+| (changed files list) | `git status` |
+| Tick files to include | `git add <file>`  or  `git add .` |
+| Commit to `<branch>` | `git commit -m "message"` |
+| Push origin | `git push` |
+| Fetch origin | `git fetch` |
+| Pull origin | `git pull` |
+| New branch | `git switch -c v1` |
+| Switch branch | `git switch master` |
+| Publish branch | `git push -u origin v1` |
+| History tab | `git log --oneline` |
+| Merge into current branch | `git merge v1` |
+| Delete branch | `git branch -d v1` |
+
+**A typical day:**
+
+```bash
+git pull                          # get latest code
+git switch -c feature-login       # new feature branch
+# ... edit files ...
+git add .
+git commit -m "Add login page"
+git push -u origin feature-login  # then open a Pull Request on GitHub
+```
+
+> ✅ **END OF TOPIC 11 — Bonus: Terminal Cheat Sheet (GitHub Desktop → Terminal)**
+
+════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+
+# 📌 TOPIC 12 — Recap & Extra Facts (covered at the start of Class 3)
+
+### 12.1 `main` vs `master`
+
+- Some repos call the default branch **`master`**, others **`main`**.
+- **There is no technical difference.** They are just two names for the same thing (the stable branch).
+- *Extra fact:* GitHub changed the default name for new repos from `master` to `main` in 2020. Older repos still use `master`.
+
+### 12.2 Code Stays Remote: GitHub Codespaces
+
+- In the past, every project had a **local** repo + a **remote** repo.
+- Today, **many companies keep code remote-only for security**. Nothing is cloned to your laptop.
+- **GitHub Codespaces** = a full coding environment (VS Code) that runs **in the cloud, in your browser**. *(Tutor will cover it later.)*
+
+### 12.3 Conflict Recap
+
+- You clone/branch the repo and start working.
+- Meanwhile **master changes** (other people merge their work).
+- Now your copy and master **disagree** → you must **merge master's changes into yours** and fix the clashing lines. That is **resolving the conflict** (Topic 10).
+
+> ✅ **END OF TOPIC 12 — Recap & Extra Facts (covered at the start of Class 3)**
+
+════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+
+# 📌 TOPIC 13 — Git from the Terminal (No UI)
+
+> 💡 Git is a **very deep hole**. About **4–5 commands cover 90% of real work**. The tutor remembers about **10 commands**, no more. Don't over-study it.
+
+### 13.1 Install Git
+
+```bash
+sudo apt install git     # Linux (Ubuntu)
+brew install git         # Mac
+```
+
+### 13.2 Tell Git Who You Are (one time)
+
+```bash
+git config --global user.name  "Your Name"
+git config --global user.email "you@example.com"
+```
+
+### 13.3 Authenticate with GitHub: SSH Keys
+
+- **Old way (~5 years ago):** type your **username + password on every push**.
+- **New way:** an **SSH key pair**. Much **more secure**, and no typing passwords every time.
+
+```
+Your computer                          GitHub
+┌──────────────────┐                   ┌──────────────────────────┐
+│ PRIVATE key 🔒    │ ◄── they match ──► │ PUBLIC key (you upload)  │
+│ (never share it) │                   │ Settings → SSH & GPG keys│
+└──────────────────┘                   └──────────────────────────┘
+```
+
+```bash
+ssh-keygen -t ed25519 -C "you@example.com"   # 1. create the key pair
+cat ~/.ssh/id_ed25519.pub                     # 2. copy the PUBLIC key
+# 3. GitHub → Settings → SSH and GPG keys → New SSH key → paste
+ssh -T git@github.com                         # 4. test the connection
+```
+
+> ⚠️ The **private key** (`id_ed25519`, no `.pub`) must **never** be shared or shown on screen.
+
+### 13.4 Full Demo: New Repo → First Push (terminal only)
+
+```bash
+# 1. On GitHub: New → name it (e.g. "September-21-MLOps") → Public → Create → copy the URL
+git clone <repo-url>          # 2. local copy
+cd September-21-MLOps
+ls                            # empty folder
+touch something.txt           # 3. create a file
+git add .                     # 4. stage ALL changed files
+git commit -m "First commit"  # 5. snapshot (local)
+git push                      # 6. upload to GitHub
+```
+
+> 💡 For a **brand-new branch** that doesn't exist on GitHub yet, the first push needs an **upstream**:
+> `git push -u origin <branch-name>` (the terminal version of **"Publish branch"**).
+
+### 13.5 The Big Three (used over and over)
+
+```
+git add .   →   git commit -m "message"   →   git push
+```
+
+For **every** new change: **add → commit → push**.
+
+| Want to stage… | Command |
+|---|---|
+| Everything | `git add .` |
+| One file | `git add something.txt` |
+| One folder | `git add lec-1/` |
+
+> ⚠️ **Golden rule: `git pull` before `git push`.** Someone else may have pushed changes. Get them first, or your push can be rejected/conflict.
+
+### 13.6 Tutor's Lazy Shortcut: One Command for All Three
+
+The tutor wrote a small **shell function** in their terminal config that runs add + commit + push in one go. The text you type becomes the commit message. *"Just different ways of being lazy."* 😄
+
+```bash
+# add to ~/.zshrc or ~/.bashrc
+gacp() { git add . && git commit -m "$1" && git push; }
+
+gacp "Add login page"     # = add + commit + push
+```
+
+*(The function name has no special meaning. It's whatever name you give it. The tutor also has one for `git log`.)*
+
+### 13.7 See What's Going On: `status`, `log`, `diff`
+
+| Command | Shows |
+|---|---|
+| `git status` | Which files are changed / staged / not tracked |
+| `git log` | All past commits: **author, email, date/time, message** |
+| `git log --oneline` | Short version: one line per commit |
+| `git diff` | **Exact line changes** you made that are **not staged/committed yet** |
+| `git diff <file>` | Changes in **one particular file** |
+
+### 13.8 💡 Weak at Linux Terminal Commands?
+
+The tutor recommends a **~5-hour Linux command-line course on YouTube**. **Don't** watch it in one go. Do **30–60 minutes a day** or an hour on weekends.
+
+> *"You will never be as free and less stressed than you are right now."* Practise now.
+
+> ✅ **END OF TOPIC 13 — Git from the Terminal (No UI)**
+
+════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+
+# 📌 TOPIC 14 — Git Rebase
+
+![Git rebase: before and after](images/git_rebase.png)
+
+### 14.1 The Situation
+
+- You create a feature branch **`v1`** from `main` and work on it.
+- **Meanwhile, others keep committing to `main`.**
+- So `main` now has commits that **`v1` doesn't have**.
+
+### 14.2 What Rebase Does
+
+**Re-base** = change the **base** of your branch.
+It **lifts all your `v1` commits** and **replays them on the tip (latest commit) of `main`**, as if you had started `v1` today.
+
+```bash
+git switch v1          # be on your feature branch
+git rebase main        # move v1 on top of the latest main
+# conflict? → fix the file → git add <file> → git rebase --continue
+# want to cancel?       → git rebase --abort
+```
+
+### 14.3 Merge vs Rebase
+
+| | `git merge` | `git rebase` |
+|---|---|---|
+| History shape | Branches stay visible (a "fork" in the tree) | **One straight line** (linear) |
+| Commit history | **Kept as it really happened** | **Rewritten**: your commits become new commits |
+| Final code | Same | Same |
+| Safe for shared branches? | ✅ Yes | ⚠️ Risky |
+
+### 14.4 Why People Like It, and Why the Tutor Doesn't Recommend It
+
+- ✅ **Pro:** people like **linear trees**. They're cleaner and easier to read.
+- ❌ **Con:** rebase **re-commits every commit**, so it **rewrites commit history**. You **lose information**, like **when the feature was originally developed**. That's not good.
+- *Extra golden rule:* **never rebase a branch other people are also using.** Their history won't match yours anymore.
+
+> **Learner question:** *What if there's a conflict during rebase?*
+> **Answer:** Solve it exactly the same way as in Topic 10: fix the lines, `git add`, continue.
+
+> ✅ **END OF TOPIC 14 — Git Rebase**
+
+════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+
+**Next class:** Deployment basics with **Streamlit, Flask, FastAPI, Gradio**.
+
+════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+
+## Quick Revision
+
+| Term | Easy Meaning |
+|---|---|
+| **Git** | Open-source version control system (the technology) |
+| **GitHub** | Microsoft's product that hosts Git repos online (like Gmail for email) |
+| **Git services** | GitHub (Microsoft), GitLab (GitLab Inc.), Bitbucket (Atlassian), CodeCommit (AWS) |
+| **Commit** | Save a snapshot of the codebase in the **local** repo |
+| **Centralized VCS** | One server, one copy, one person at a time; very secure but a single point of failure, not scalable, no offline work |
+| **Distributed VCS** | Everyone has a full copy; scalable and works offline; risk = code leaks (GTA 5 leak) |
+| **Repository** | Fancy word for a folder of code/documents |
+| **Local repo** | The copy on your computer |
+| **Remote repo** | The online copy (GitHub) |
+| **add** | Put file(s) in the staging area |
+| **Staging area** | The "waiting room" of files picked for the next commit |
+| **push** | Upload local commits to the remote repo |
+| **fetch** | Download remote changes (doesn't change your files) |
+| **pull** | Update local with remote (fetch + merge) |
+| **clone** | Make a local copy of a remote repo |
+| **Flow** | ADD → COMMIT → PUSH |
+| **GitHub profile** | Your real portfolio; pin projects, add UI screenshots, avoid walls of text |
+| **README** | Window into a project: problem, approach, quick start |
+| **.gitkeep** | Placeholder file so Git tracks an empty folder |
+| **Branch** | A copy of the codebase to work on safely without touching main |
+| **Publish branch** | A new branch exists only locally until it's published to the remote |
+| **Pull Request** | Asking the owner to pull your branch's code into main |
+| **Merge** | Combine a branch into main (after PR approval) |
+| **Feature branch** | One branch per feature, so you develop in peace |
+| **Fork** | Copy of someone else's repo onto **your** account |
+| **Open-source flow** | Fork → Clone → Change → Commit & Push (to fork) → Pull Request |
+| **Sync fork** | Update your fork when it falls behind the original |
+| **good first issue** | Beginner-friendly issues in open-source repos |
+| **Conflict** | Two branches changed the same line differently → a human must choose |
+| **Resolve conflict** | Pick/combine → remove `<<<<<<< ======= >>>>>>>` → add → commit |
+| **Why terminal?** | Remote servers have no UI, only a terminal |
+| **main vs master** | Same thing, two names for the default/stable branch |
+| **Codespaces** | GitHub's cloud coding environment; code never sits on your laptop |
+| **git config** | Set your name + email once |
+| **SSH key** | Private key on your PC + public key on GitHub → secure login, no password per push |
+| **Big three** | `git add .` → `git commit -m "msg"` → `git push` |
+| **Pull before push** | Always get others' changes first |
+| **Upstream (`-u`)** | First push of a new branch: `git push -u origin <branch>` |
+| **git status** | What's changed / staged |
+| **git log** | Commit history (author, email, time, message) |
+| **git diff** | Line-by-line changes not yet committed |
+| **Rebase** | Replay your branch's commits on the tip of main → linear history |
+| **Why avoid rebase** | Rewrites commit history → lose when work really happened |
