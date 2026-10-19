@@ -6,13 +6,11 @@ Borrow money now
 → easy today
 → repay with interest later
 
-
 Technical debt:
 
 Take shortcut now
 → faster development today
 → more bugs + complexity + maintenance later
-
 
 **What:**  
 Technical debt = things that make an ML system **quick and easy to build now, but harder to fix, maintain, or change later**.
@@ -46,6 +44,7 @@ If you change how `location` is encoded, the relationships learned for `area`, `
 
 **Simple meaning:**
 
+> [!NOTE]
 > Change one ML component → many other behaviors may change unexpectedly.
 
 ---
@@ -72,6 +71,7 @@ Changing or removing Model A may break everything after it.
 
 **Simple meaning:**
 
+> [!NOTE]
 > Keep adding patches instead of fixing the root model → the system becomes complicated and fragile.
 
 ---
@@ -103,6 +103,7 @@ Unknown consumers may suddenly break.
 
 **Simple meaning:**
 
+> [!NOTE]
 > Unknown systems depend on your model → changing or removing it becomes risky.
 
 ---
@@ -133,6 +134,7 @@ Your pipeline may fail or, worse, continue running with incorrect data.
 
 **Simple meaning:**
 
+> [!NOTE]
 > Your model depends on external data → someone else's change can break your model.
 
 ---
@@ -171,6 +173,7 @@ Eventually nobody clearly knows which configuration produced which model.
 
 **Simple meaning:**
 
+> [!NOTE]
 > Too many configurations → difficult to understand, reproduce, and safely change the system.
 
 ---
@@ -207,6 +210,7 @@ The model only sees outcomes from people it previously approved.
 
 **Simple meaning:**
 
+> [!NOTE]
 > Model predictions influence future data → future models may reinforce their own previous decisions.
 
 ---
@@ -265,6 +269,7 @@ Nobody wants to remove anything because nobody knows what depends on what.
 
 **Simple meaning:**
 
+> [!NOTE]
 > Too many pipelines, scripts, and connections → the ML system becomes a jungle that is hard to maintain.
 
 ---
@@ -313,6 +318,7 @@ Six months later, nobody can reproduce it because they don't know:
 
 **Simple meaning:**
 
+> [!NOTE]
 > No data testing → bad data can silently damage the model.  
 > No reproducibility → you cannot recreate the same experiment/model later.
 
@@ -376,6 +382,7 @@ Example:
 
 **Simple meaning:**
 
+> [!NOTE]
 > The real world keeps changing → continuously monitor the model and retrain/update when necessary.
 
 ---

@@ -1,6 +1,6 @@
 # MLOps — Introduction
 
-════════════════════════════════════════════════════════════
+---
 
 # 📌 TOPIC 1 — What is MLOps?
 
@@ -42,9 +42,7 @@ The set of practices used to **build, deploy, monitor, and maintain ML models re
 
 > ✅ **END OF TOPIC 1 — What is MLOps?**
 
-════════════════════════════════════════════════════════════
-
-════════════════════════════════════════════════════════════
+---
 
 # 📌 TOPIC 2 — Data Sources — Client-side vs Server-side
 
@@ -85,12 +83,11 @@ Used to train the model (e.g., search ranking)
 
 > ✅ **END OF TOPIC 2 — Data Sources — Client-side vs Server-side**
 
-════════════════════════════════════════════════════════════
-
-════════════════════════════════════════════════════════════
+---
 
 # 📌 TOPIC 3 — Rule — Train on Organic Data
 
+> [!NOTE]
 > **Train models on organic data (real user behaviour) as much as possible.**
 
 - **Organic data** = features coming from real user actions (e.g., what the user actually searched and clicked).
@@ -99,9 +96,7 @@ Used to train the model (e.g., search ranking)
 
 > ✅ **END OF TOPIC 3 — Rule — Train on Organic Data**
 
-════════════════════════════════════════════════════════════
-
-════════════════════════════════════════════════════════════
+---
 
 # 📌 TOPIC 4 — Data Quality Checks — Amazon Deequ
 
@@ -134,22 +129,19 @@ Constraint broken → Deequ quality report → email alert to team
 
 > ✅ **END OF TOPIC 4 — Data Quality Checks — Amazon Deequ**
 
-════════════════════════════════════════════════════════════
-
-════════════════════════════════════════════════════════════
+---
 
 # 📌 TOPIC 5 — Lineage & Schemas
 
 - **Lineage:** Tracks where each piece of data came from and how it evolved: which **joins, merges, and transformations** were applied.
 - **Schemas:** The structure of the data (columns, data types) must be controlled for every database/table.
 
+> [!NOTE]
 > **MLOps covers all of these.** As an MLOps engineer, you must **control and monitor** pipelines, storage, quality checks, lineage, and schemas.
 
 > ✅ **END OF TOPIC 5 — Lineage & Schemas**
 
-════════════════════════════════════════════════════════════
-
-════════════════════════════════════════════════════════════
+---
 
 # 📌 TOPIC 6 — MLOps vs DevOps
 
@@ -158,6 +150,7 @@ Constraint broken → Deequ quality report → email alert to team
 | Works with **code** only | Works with **code + data + model** |
 | | Also: **features, config, environment** |
 
+> [!NOTE]
 > An MLOps engineer must manage and monitor **all** of these, not just code.
 
 ### 💡 Career Tip (from tutor)
@@ -167,9 +160,7 @@ Constraint broken → Deequ quality report → email alert to team
 
 > ✅ **END OF TOPIC 6 — MLOps vs DevOps**
 
-════════════════════════════════════════════════════════════
-
-════════════════════════════════════════════════════════════
+---
 
 # 📌 TOPIC 7 — How ML Systems Are Different (Axes)
 
@@ -201,9 +192,7 @@ assert roc_auc >= 0.8           # ✅ do this instead
 
 > ✅ **END OF TOPIC 7 — How ML Systems Are Different (Axes)**
 
-════════════════════════════════════════════════════════════
-
-════════════════════════════════════════════════════════════
+---
 
 # 📌 TOPIC 8 — Axes Continued — Latency & Decay
 
@@ -234,6 +223,7 @@ assert p95_latency_ms <= 100       # latency test (example threshold)
 - Human behaviour is **unpredictable**: we want one thing today and something else tomorrow.
 - The data the model sees in production slowly stops looking like the data it was trained on.
 
+> [!NOTE]
 > **A deployed model always gets worse over time**, so it must be **monitored** continuously. (This is called **drift**; see Topic 11.)
 
 ### Summary: 3 Axes of How ML Is Different
@@ -244,13 +234,12 @@ Axis 2 → What "correct" means    → metric thresholds (not exact outputs) + l
 Axis 3 → Decay                   → deployed models get worse over time → monitor them
 ```
 
+> [!NOTE]
 > Everything we do in ML (training, trying models, tuning) must be **tracked, orchestrated, configured, organized and made reproducible**. That takes real effort, and that effort is MLOps.
 
 > ✅ **END OF TOPIC 8 — Axes Continued — Latency & Decay**
 
-════════════════════════════════════════════════════════════
-
-════════════════════════════════════════════════════════════
+---
 
 # 📌 TOPIC 9 — Data Engineer vs MLOps Pipelines
 
@@ -265,12 +254,11 @@ Website / App ──(Data Engineer)──► Database(s) ──(MLOps Engineer)�
 
 > ✅ **END OF TOPIC 9 — Data Engineer vs MLOps Pipelines**
 
-════════════════════════════════════════════════════════════
-
-════════════════════════════════════════════════════════════
+---
 
 # 📌 TOPIC 10 — Module Syllabus (Planned Topics)
 
+> [!NOTE]
 > MLOps is a **code-heavy** module: almost no theory, mostly **code and APIs**. Practice a lot.
 
 | # | Topic |
@@ -290,9 +278,7 @@ Website / App ──(Data Engineer)──► Database(s) ──(MLOps Engineer)�
 
 > ✅ **END OF TOPIC 10 — Module Syllabus (Planned Topics)**
 
-════════════════════════════════════════════════════════════
-
-════════════════════════════════════════════════════════════
+---
 
 # 📌 TOPIC 11 — Drift
 
@@ -329,7 +315,6 @@ In a model, only two things can change:
 Data from:   this week   1 month ago   6 months ago   2 years ago
 Weight:        1.0           0.8           0.3           0.05
 
-
 ### 11.3 Data Drift — The FEATURES Themselves Change
 
 **What:** The input features change, or stop being meaningful.
@@ -346,6 +331,7 @@ New feature ideas for remote productivity:
 - Number of Jira tickets solved
 - Number of PRs (pull requests) / code deployments
 
+> [!WARNING]
 > ⚠️ Some features can be gamed. **Example:** "mouse movement on screen" can be faked with **mouse jiggler** gadgets (or by putting the mouse on an analog watch!). Choose features carefully.
 
 ### 11.4 How Drift Occurs — 4 Patterns
@@ -408,9 +394,7 @@ Drift itself is not hard to understand. What makes it dangerous is **how quietly
 
 > ✅ **END OF TOPIC 11 — Drift**
 
-════════════════════════════════════════════════════════════
-
-════════════════════════════════════════════════════════════
+---
 
 # 📌 TOPIC 12 — How to Detect Drift
 
@@ -420,13 +404,12 @@ Drift itself is not hard to understand. What makes it dangerous is **how quietly
 | **2. Hypothesis testing** | Run **statistical tests** on features (training data vs production data) | Very **important and effective** (covered later in the course) |
 | **3. Metrics over time** | Track model metrics (MAE, RMSE, R², etc.) over time | If metrics get worse → something has drifted |
 
+> [!TIP]
 > 💡 **Tutor's habit:** In their old company they opened the monitoring dashboard **every morning** to check recent numbers. Once a model is deployed, **don't be carefree**: keep checking it.
 
 > ✅ **END OF TOPIC 12 — How to Detect Drift**
 
-════════════════════════════════════════════════════════════
-
-════════════════════════════════════════════════════════════
+---
 
 # 📌 TOPIC 13 — Case Study — Bike Rental Drift (January vs February)
 
@@ -492,6 +475,7 @@ print("February    :", score(model, feb))    # drift check
 | **January held-out (Jan 25–31)** | Baseline metrics |
 | **February** | **MAE and RMSE increased by ~10** (a significant jump); R² did not change much |
 
+> [!NOTE]
 > **Conclusion:** The model performs worse on February → **there is drift**.
 
 ### 13.5 🏠 Homework
@@ -505,9 +489,7 @@ Find out **which type of drift** this is: **data drift or concept drift?**
 
 > ✅ **END OF TOPIC 13 — Case Study — Bike Rental Drift (January vs February)**
 
-════════════════════════════════════════════════════════════
-
-════════════════════════════════════════════════════════════
+---
 
 # 📌 TOPIC 14 — Ranking Metrics — MRR & NDCG
 
@@ -575,6 +557,7 @@ Each user action on a product gives it a higher **relevance score**:
 
 *(Hotel example: click hotel = 1 → detail page = 2 → payment page = 3 → attempt payment = 4 → payment succeeds = 5.)*
 
+> [!NOTE]
 > For NDCG to work, you first need this **relevance pipeline/funnel** defined.
 
 #### Step 2: Example
@@ -660,9 +643,7 @@ print(ndcg([2, 1, 2, 0, 1]))   # ≈ 0.948
 
 > ✅ **END OF TOPIC 14 — Ranking Metrics — MRR & NDCG**
 
-════════════════════════════════════════════════════════════
-
-════════════════════════════════════════════════════════════
+---
 
 # 📌 TOPIC 15 — Random Seed & Reproducibility
 
@@ -679,19 +660,16 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 model = RandomForestRegressor(random_state=42)
 ```
 
+> [!NOTE]
 > **Rule:** Always set a seed if you want your results to be reproducible.
 
 > ✅ **END OF TOPIC 15 — Random Seed & Reproducibility**
 
-════════════════════════════════════════════════════════════
-
-════════════════════════════════════════════════════════════
+---
 
 **Next class:** Git, GitHub & GitLab (next week; no class on the holiday).
 
-════════════════════════════════════════════════════════════
-
-════════════════════════════════════════════════════════════
+---
 
 ## Quick Revision
 
