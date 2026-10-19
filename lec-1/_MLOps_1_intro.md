@@ -4,6 +4,8 @@
 
 # 📌 TOPIC 1 — What is MLOps?
 
+**⭐ Definition:** MLOps is a set of practices that combines Machine Learning, DevOps and Data Engineering to reliably build, deploy, monitor and maintain ML models in production, automating the whole lifecycle from data → training → deployment → monitoring → retraining.
+
 **MLOps = ML + DevOps + Data Engineering**
 
 The set of practices used to **build, deploy, monitor, and maintain ML models reliably in production**.
